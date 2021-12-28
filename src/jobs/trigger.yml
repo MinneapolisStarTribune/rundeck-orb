@@ -76,3 +76,5 @@ steps:
         else
           echo "Rundeck job is ${JOBSTATUS}."
         fi
+        jq . ${APIOUT}
+
