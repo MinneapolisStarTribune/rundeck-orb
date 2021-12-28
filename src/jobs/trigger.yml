@@ -49,7 +49,7 @@ steps:
             BASEURL="${RUNDECK_BASE_URL}"
           fi
         fi
-        curl -LSg -X POST -o ${APIOUT} -w '%{http_code}\n' \
+        curl -LSsg -X POST -o ${APIOUT} -w '%{http_code}\n' \
           --header 'Accept: application/json' \
           --header "X-Rundeck-Auth-Token: ${AUTHTKN}" \
           --data-urlencode "option.cibranch=${CIRCLE_BRANCH}" \
