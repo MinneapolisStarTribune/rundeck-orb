@@ -1,0 +1,5 @@
+version: 2.1
+description: Use Rundeck from a CircleCI workflow.
+
+display:
+  source_url: https://github.com/MinneapolisStarTribune/rundeck-orb
