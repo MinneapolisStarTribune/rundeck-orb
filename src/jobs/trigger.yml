@@ -75,4 +75,4 @@ steps:
           echo "Rundeck job is running: $( jq -r .permalink ${APIOUT})"
         else
           echo "Rundeck job is ${JOBSTATUS}."
-        
+        fi
