@@ -40,7 +40,7 @@ steps:
           > ${STATUSOUT}
         if (( $(cat ${STATUSOUT}) > 399 ))
         then
-          echo "Request failed with status ${STATUSOUT}"
+          echo "Request failed with status $(cat ${STATUSOUT})"
           jq . ${APIOUT}
           exit 1
         fi
