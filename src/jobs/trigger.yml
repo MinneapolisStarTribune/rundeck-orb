@@ -21,10 +21,12 @@ resource_class: small
 steps:
   - run:
       name: Trigger Rundeck
+      environment:
+        AUTHTKN: <<parameters.authtoken>>
+        BASEURL: <<parameters.baseurl>>
       command: |
         APIOUT=$(mktemp)
         STATUSOUT=$(mktemp)
-        AUTHTKN="<<parameters.authtoken>>"
         if [[ "${AUTHTKN}" == "abcdef01-2345-6789-abcd-ef0123456789" ]]
         then
           if [[ "${RUNDECK_AUTH_TOKEN}x" == "x" ]]
@@ -36,7 +38,6 @@ steps:
             AUTHTKN="${RUNDECK_AUTH_TOKEN}"
           fi
         fi
-        BASEURL="<<parameters.baseurl>>"
         if [[ "${BASEURL}" == "https://rundeck.example.org/api" ]]
         then
           if [[ "${RUNDECK_BASE_URL}x" == "x" ]]
