@@ -69,10 +69,11 @@ steps:
           jq . ${APIOUT}
           exit 1
         fi
-        JOBSTATUS=$(jq -r '.status // "unknown"' ${APIOUT})
-        if [[ "${JOBSTATUS}" == "running" ]]
+        JOBURL="$(jq -r .permalink ${APIOUT})"
+        echo "Rundeck job is $(jq -r '.status // "unknown"' ${APIOUT})"
+        if [[ "$JOBURLx" == "x" ]]
         then
-          echo "Rundeck job is running: $( jq -r .permalink ${APIOUT})"
+          echo "No job link available"
         else
-          echo "Rundeck job is ${JOBSTATUS}."
+          printf '\e]8;;%s\e\\%s\e]8;;\e\\\n' "${JOBURL}" "View Job"
         fi
