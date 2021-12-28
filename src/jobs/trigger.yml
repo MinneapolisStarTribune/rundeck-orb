@@ -4,7 +4,7 @@ parameters:
   baseurl:
     description: The base URL of your Rundeck API. This should not end in a slash.
     type: string
-    default: "https://rundeck.your.org/api"
+    default: "https://rundeck.example.org/api"
   jobid:
     description: The unique identifier for the job to trigger.
     type: string
@@ -24,6 +24,30 @@ steps:
       command: |
         APIOUT=$(mktemp)
         STATUSOUT=$(mktemp)
+        AUTHTKN="<<parameters.authtoken>>"
+        if [[ "${AUTHTKN}" == "abcdef01-2345-6789-abcd-ef0123456789" ]]
+        then
+          if [[ "${RUNDECK_AUTH_TOKEN}x" == "x" ]]
+          then
+            echo "Rundeck authentication token not provided, and not present in environment."
+            exit 1
+          else
+            echo "Using Rundeck authentication token from environment."
+            AUTHTKN="${RUNDECK_AUTH_TOKEN}"
+          fi
+        fi
+        BASEURL="<<parameters.baseurl>>"
+        if [[ "${BASEURL}" == "https://rundeck.example.org/api" ]]
+        then
+          if [[ "${RUNDECK_BASE_URL}x" == "x" ]]
+          then
+            echo "Rundeck base URL not provided, and not present in environment."
+            exit 1
+          else
+            echo "Using Rundeck base URL from environment."
+            BASEURL="${RUNDECK_BASE_URL}"
+          fi
+        fi
         curl -LSg -X POST -o ${APIOUT} -w '%{http_code}\n' \
           --header 'Accept: application/json' \
           --header 'X-Rundeck-Auth-Token: <<parameters.authtoken>>' \
