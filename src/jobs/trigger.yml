@@ -51,7 +51,7 @@ steps:
         fi
         curl -LSg -X POST -o ${APIOUT} -w '%{http_code}\n' \
           --header 'Accept: application/json' \
-          --header 'X-Rundeck-Auth-Token: <<parameters.authtoken>>' \
+          --header "X-Rundeck-Auth-Token: ${AUTHTKN}" \
           --data-urlencode "option.cibranch=${CIRCLE_BRANCH}" \
           --data-urlencode "option.cibuildnum=${CIRCLE_BUILDNUM}" \
           --data-urlencode "option.cicommit=${CIRCLE_SHA1}" \
