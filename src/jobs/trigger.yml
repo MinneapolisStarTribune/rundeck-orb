@@ -48,8 +48,7 @@ steps:
             BASEURL="${RUNDECK_BASE_URL}"
           fi
         fi
-
-        curl -LSsg -X POST
+        curl -LSsg \
           --header 'Accept: application/yaml' \
           --header "X-Rundeck-Auth-Token: ${AUTHTKN}" \
           "${BASEURL}/18/job/<<parameters.jobid>>" \
