@@ -19,10 +19,14 @@ parameters:
       a UUID.
     type: env_var_name
     default: RUNDECK_AUTH_TOKEN
+  displayname:
+    description: A string to show for the step name.
+    type: string
+    default: Trigger Rundeck
 
 steps:
   - run:
-      name: Trigger Rundeck
+      name: <<parameters.displayname>>
       environment:
         JOBID: <<parameters.jobid>>
         AUTHTKNVAR: <<parameters.authtoken>>
