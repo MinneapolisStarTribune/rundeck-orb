@@ -75,5 +75,5 @@ steps:
         then
           echo "No job link available"
         else
-          printf '\e]8;;%s\e\\%s\e]8;;\e\\\n' "${JOBURL}" "View Job"
+          echo "View job: ${JOBURL}"
         fi
