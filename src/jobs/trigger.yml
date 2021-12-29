@@ -48,20 +48,29 @@ steps:
             BASEURL="${RUNDECK_BASE_URL}"
           fi
         fi
-        curl -LSsg -X POST -o ${APIOUT} -w '%{http_code}\n' \
-          --header 'Accept: application/json' \
+
+        curl -LSsg -X POST
+          --header 'Accept: application/yaml' \
           --header "X-Rundeck-Auth-Token: ${AUTHTKN}" \
-          --data-urlencode "option.cibranch=${CIRCLE_BRANCH}" \
-          --data-urlencode "option.cibuildnum=${CIRCLE_BUILDNUM}" \
-          --data-urlencode "option.cicommit=${CIRCLE_SHA1}" \
-          --data-urlencode "option.cireponame=${CIRCLE_PROJECT_REPONAME}" \
-          --data-urlencode "option.cirepoowner=${CIRCLE_PROJECT_USERNAME}" \
-          --data-urlencode "option.cirepourl=${CIRCLE_REPOSITORY_URL}" \
-          --data-urlencode "option.ciprurl=${CIRCLE_PULL_REQUEST}" \
-          --data-urlencode "option.citag=${CIRCLE_TAG}" \
-          --data-urlencode "option.ciuser=${CIRCLE_USERNAME}" \
-          "${BASEURL}/18/job/<<parameters.jobid>>/run" \
-          > ${STATUSOUT}
+          "${BASEURL}/18/job/<<parameters.jobid>>" \
+          | yq e '.[].options[].name' - > options
+
+        echo -n "curl -LSsg -X POST -o ${APIOUT} -w '%{http_code}\n'" > command
+        echo -n " --header 'Accept: application/json'" >> command
+        echo -n " --header \"X-Rundeck-Auth-Token: ${AUTHTKN}\"" >> command
+        for O in `cat options` ; do case $O in
+          cibranch)    echo " --data-urlencode \"option.$O=${CIRCLE_BRANCH}\"" ;;
+          cibuildnum)  echo " --data-urlencode \"option.$O=${CIRCLE_BUILDNUM}\"" ;;
+          cicommit)    echo " --data-urlencode \"option.$O=${CIRCLE_SHA1}\"" ;;
+          cireponame)  echo " --data-urlencode \"option.$O=${CIRCLE_PROJECT_REPONAME}\"" ;;
+          cirepoowner) echo " --data-urlencode \"option.$O=${CIRCLE_PROJECT_USERNAME}\"" ;;
+          cirepourl)   echo " --data-urlencode \"option.$O=${CIRCLE_REPOSITORY_URL}\"" ;;
+          ciprurl)     echo " --data-urlencode \"option.$O=${CIRCLE_PULL_REQUEST}\"" ;;
+          citag)       echo " --data-urlencode \"option.$O=${CIRCLE_TAG}\"" ;;
+          ciuser)      echo " --data-urlencode \"option.$O=${CIRCLE_USERNAME}\"" ;;
+        esac ; done >> command
+        echo "${BASEURL}/18/job/<<parameters.jobid>>/run" >> command
+        sh command > ${STATUSOUT}
         if (( $(cat ${STATUSOUT}) > 399 ))
         then
           echo "Request failed with status $(cat ${STATUSOUT})"
