@@ -1,7 +1,5 @@
 description: |
-  This job will use your Rundeck API to trigger a job. It will include details about the current
-  workflow, including the commit, repo, branch, and more. Your job needs to define options for
-  each of these values.
+  Invoke Rundeck via HTTP. Note that your environment needs to provide curl, jq, and yq.
 
 parameters:
   jobid:
@@ -22,12 +20,11 @@ parameters:
     type: env_var_name
     default: RUNDECK_AUTH_TOKEN
 
-docker:
-  - image: cimg/base:stable
-resource_class: small
-
 steps:
-  - start:
-      jobid: <<parameters.jobid>>
-      baseurl: <<parameters.baseurl>>
-      authtoken: <<parameters.authtoken>>
+  - run:
+      name: Trigger Rundeck
+      environment:
+        JOBID: <<parameters.jobid>>
+        AUTHTKNVAR: <<parameters.authtoken>>
+        BASEURLVAR: <<parameters.baseurl>>
+      command: <<include(commands/run.sh)>>
