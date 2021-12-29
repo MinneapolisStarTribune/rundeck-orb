@@ -58,15 +58,15 @@ steps:
         echo -n " --header 'Accept: application/json'" >> command
         echo -n " --header \"X-Rundeck-Auth-Token: ${AUTHTKN}\"" >> command
         for O in `cat options` ; do case $O in
-          cibranch)    echo " --data-urlencode \"option.$O=${CIRCLE_BRANCH}\"" ;;
-          cibuildnum)  echo " --data-urlencode \"option.$O=${CIRCLE_BUILDNUM}\"" ;;
-          cicommit)    echo " --data-urlencode \"option.$O=${CIRCLE_SHA1}\"" ;;
-          cireponame)  echo " --data-urlencode \"option.$O=${CIRCLE_PROJECT_REPONAME}\"" ;;
-          cirepoowner) echo " --data-urlencode \"option.$O=${CIRCLE_PROJECT_USERNAME}\"" ;;
-          cirepourl)   echo " --data-urlencode \"option.$O=${CIRCLE_REPOSITORY_URL}\"" ;;
-          ciprurl)     echo " --data-urlencode \"option.$O=${CIRCLE_PULL_REQUEST}\"" ;;
-          citag)       echo " --data-urlencode \"option.$O=${CIRCLE_TAG}\"" ;;
-          ciuser)      echo " --data-urlencode \"option.$O=${CIRCLE_USERNAME}\"" ;;
+          cibranch)    echo -n " --data-urlencode \"option.$O=${CIRCLE_BRANCH}\"" ;;
+          cibuildnum)  echo -n " --data-urlencode \"option.$O=${CIRCLE_BUILDNUM}\"" ;;
+          cicommit)    echo -n " --data-urlencode \"option.$O=${CIRCLE_SHA1}\"" ;;
+          cireponame)  echo -n " --data-urlencode \"option.$O=${CIRCLE_PROJECT_REPONAME}\"" ;;
+          cirepoowner) echo -n " --data-urlencode \"option.$O=${CIRCLE_PROJECT_USERNAME}\"" ;;
+          cirepourl)   echo -n " --data-urlencode \"option.$O=${CIRCLE_REPOSITORY_URL}\"" ;;
+          ciprurl)     echo -n " --data-urlencode \"option.$O=${CIRCLE_PULL_REQUEST}\"" ;;
+          citag)       echo -n " --data-urlencode \"option.$O=${CIRCLE_TAG}\"" ;;
+          ciuser)      echo -n " --data-urlencode \"option.$O=${CIRCLE_USERNAME}\"" ;;
         esac ; done >> command
         echo " ${BASEURL}/18/job/<<parameters.jobid>>/run" >> command
         sh command > ${STATUSOUT}
