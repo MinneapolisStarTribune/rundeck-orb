@@ -69,7 +69,7 @@ steps:
           citag)       echo " --data-urlencode \"option.$O=${CIRCLE_TAG}\"" ;;
           ciuser)      echo " --data-urlencode \"option.$O=${CIRCLE_USERNAME}\"" ;;
         esac ; done >> command
-        echo "${BASEURL}/18/job/<<parameters.jobid>>/run" >> command
+        echo " ${BASEURL}/18/job/<<parameters.jobid>>/run" >> command
         sh command > ${STATUSOUT}
         if (( $(cat ${STATUSOUT}) > 399 ))
         then
